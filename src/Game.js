@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import {times} from 'lodash'
+import times from 'lodash/times'
 import './App.css'
 import Mario from './presentational_components/Mario'
 import MushRoom from './presentational_components/MushRoom'
@@ -154,8 +153,5 @@ class Game extends Component {
     );
   }
 }
-
-
-
 
 export default Game;
