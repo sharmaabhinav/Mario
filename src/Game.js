@@ -44,7 +44,7 @@ class Game extends Component {
         return
     }
     this.handleStateAfterKeyPress(newPos)
-    this.checkGameProgress()
+    setTimeout(this.checkGameProgress.bind(this), 0)
   }
 
   handleStateAfterKeyPress (newPos) {
@@ -99,7 +99,9 @@ class Game extends Component {
     const {rowCount = 10, columnCount = 10} = this.props
     while(!allGenerated) {
       no = Math.floor(Math.random() * (rowCount * columnCount - 1))
-      mushroomPositions = {...mushroomPositions,  [no]: true}
+      if (no !== 0 ) {
+        mushroomPositions = {...mushroomPositions,  [no]: true}
+      }
       allGenerated = Object.keys(mushroomPositions).length === rowCount
     }
     this.setState({ mushroomPositions, currentMushRoomCount: rowCount})
