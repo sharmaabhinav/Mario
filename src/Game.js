@@ -11,6 +11,11 @@ class Game extends Component {
     this.state = { mushroomPositions: {}, marioPosition: {row: 0, column: 0}, totalSteps: 0, currentMushRoomCount : 0 }
   }
 
+  getProps () {
+    const {rowCount = 10, columnCount = 10} = this.props
+    return {rowCount, columnCount}
+  }
+
   componentDidMount () {
     this.generateMushroomPositions()
     this.addUserInteraction()
@@ -47,10 +52,10 @@ class Game extends Component {
   }
 
   handleStateAfterKeyPress (newPos) {
-    const {rowCount=10} = this.props
+    const {columnCount} = this.getProps()
     const newMarioPosition = Object.assign({}, this.state.marioPosition, newPos)
     let mushroomPositions = Object.assign({}, this.state.mushroomPositions)
-    const newMarioPositionIndex = newMarioPosition.row * rowCount + newMarioPosition.column
+    const newMarioPositionIndex = newMarioPosition.row * columnCount + newMarioPosition.column
     let {currentMushRoomCount} = this.state
 
     if (mushroomPositions[newMarioPositionIndex]) {
@@ -95,7 +100,7 @@ class Game extends Component {
 
   generateMushroomPositions () {
     let no = 0,  mushroomPositions = {}, allGenerated = false
-    const {rowCount = 10, columnCount = 10} = this.props
+    const {rowCount, columnCount} = this.getProps()
     while(!allGenerated) {
       no = Math.floor(Math.random() * (rowCount * columnCount - 1))
       if (no !== 0 ) {
@@ -107,12 +112,12 @@ class Game extends Component {
   }
 
   renderGrid () {
-    const {rowCount} = this.props
+    const {rowCount} = this.getProps()
     return times(rowCount, (rowIndex) => this.renderRow(rowIndex))
   }
 
   renderRow (rowIndex) {
-    const {columnCount} = this.props
+    const {columnCount} = this.getProps()
     return <div key={rowIndex} className='row'>
       {
         times(
@@ -132,8 +137,8 @@ class Game extends Component {
   }
 
   renderCellComponent (rowIndex, columnIndex) {
-    const {rowCount} = this.props
-    if (this.state.mushroomPositions[rowIndex * rowCount + columnIndex]) {
+    const {columnCount} = this.getProps()
+    if (this.state.mushroomPositions[rowIndex * columnCount + columnIndex]) {
       return <MushRoom />
     } else if (rowIndex === this.state.marioPosition.row && columnIndex === this.state.marioPosition.column) {
       return <Mario />
@@ -143,11 +148,10 @@ class Game extends Component {
   }
 
   render() {
-    const {rowCount = 10, columnCount = 10} = this.props
     return (
       <div id='game_container'>
         {
-          this.renderGrid(rowCount, columnCount)
+          this.renderGrid()
         }
       </div>
     );
